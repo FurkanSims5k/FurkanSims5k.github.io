@@ -3,10 +3,93 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Runemist</title>
+<title>Runemist: Guardian of the Grid</title>
+<meta name="description" content="Blok bulmaca savaşları, match-3 Boss'lar ve kayıp hatıralarını arayan bir Bekçi.">
+<meta property="og:title" content="Runemist: Guardian of the Grid">
+<meta property="og:description" content="Blok bulmaca savaşları, match-3 Boss'lar ve kayıp hatıralarını arayan bir Bekçi.">
+<meta property="og:image" content="https://furkansims5k.github.io/img/hero.webp">
+<meta name="theme-color" content="#14111c">
+<link rel="icon" href="img/icon.png">
+<style>
+@font-face{font-family:"Runemist Display";src:url(font/RunemistDisplay-Regular.ttf);font-display:swap}
+:root{--bg:#14111c;--panel:#211b2e;--line:#4b3f63;--text:#f1edf8;--muted:#b7aec8;--gold:#f2c14e;--green:#3fb760;--green-dark:#25793f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:17px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:560px;margin:0 auto;padding-bottom:32px}
+.hero{display:block;width:100%;height:auto}
+.head{display:flex;gap:14px;align-items:center;padding:0 16px;margin-top:-34px;position:relative}
+.head img{width:88px;height:88px;border-radius:20px;border:3px solid var(--bg);flex:none}
+h1{font:400 25px/1.15 "Runemist Display",system-ui,sans-serif;margin:38px 0 0;letter-spacing:.2px}
+.tag{padding:0 16px;margin:16px 0;color:var(--muted)}
+.actions{padding:0 16px}
+.play{display:block;padding:17px 12px;border-radius:14px;background:var(--green);border-bottom:5px solid var(--green-dark);color:#fff;text-align:center;font:400 22px/1.2 "Runemist Display",system-ui,sans-serif;text-decoration:none}
+.play:active{transform:translateY(2px);border-bottom-width:3px}
+.play:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.help{margin:12px 2px 0;font-size:14px;color:var(--muted);text-align:center}
+.help a{color:var(--gold)}
+.shots{display:flex;gap:10px;overflow-x:auto;padding:22px 16px 6px;scroll-snap-type:x proximity}
+.shots img{height:360px;aspect-ratio:1/2;border-radius:12px;border:1px solid var(--line);flex:none;scroll-snap-align:center}
+ul{list-style:none;margin:18px 16px 0;padding:0;display:grid;gap:10px}
+li{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+li b{display:block;color:var(--gold);font-weight:600}
+footer{margin:24px 16px 0;font-size:13px;color:var(--muted);text-align:center}
+footer a{color:var(--muted)}
+</style>
 </head>
-<body style="font-family:sans-serif;text-align:center;padding:40px;background:#14111c;color:#eee">
+<body>
+<main>
+<img class="hero" src="img/hero.webp" alt="" width="1024" height="500">
+<div class="head">
+<img src="img/icon.png" alt="" width="88" height="88">
 <h1>Runemist: Guardian of the Grid</h1>
-<p><a style="color:#9cf" href="https://play.google.com/store/apps/details?id=com.runemist.game">Google Play</a></p>
+</div>
+<p class="tag" data-t="tag">Bekçi siste uyanır ve hiçbir şey hatırlamaz. Yendiğin her düşman, geçmişten bir parçayı geri getirir.</p>
+<div class="actions">
+<a class="play" id="play" href="https://play.google.com/store/apps/details?id=com.runemist.game" data-t="play">Google Play'den indir</a>
+<p class="help"><span data-t="help">Düğme açılmazsa sağ üstteki ⋯ menüsünden “Tarayıcıda aç”ı seç.</span></p>
+</div>
+<div class="shots" id="shots" tabindex="0" role="group" aria-label="Oyun görüntüleri"></div>
+<ul>
+<li><b data-t="f1t">Blok bulmacayla savaş</b><span data-t="f1">Satır ve sütunları temizle, düşmanın zayıf rengini bul.</span></li>
+<li><b data-t="f2t">Match-3 Boss'lar</b><span data-t="f2">Her on dalgada tahta değişir, Boss kendi güçleriyle karşına çıkar.</span></li>
+<li><b data-t="f3t">Parçalanmış bir hikâye</b><span data-t="f3">Hatıraları topla, seçimler yap, sana dönen karakterlerle yeniden karşılaş.</span></li>
+</ul>
+<footer><span data-t="free">Android'de ücretsiz · Enerji sistemi yok · Çevrimdışı oynanır</span></footer>
+</main>
+<script>
+(function () {
+  var en = {
+    tag: "A guardian wakes in the mist, remembering nothing. Every enemy defeated brings back a fragment of the past.",
+    play: "Get it on Google Play",
+    help: "If the button doesn't open, choose “Open in browser” from the ⋯ menu at the top right.",
+    f1t: "Block puzzle combat", f1: "Clear rows and columns, and find each enemy's weak color.",
+    f2t: "Match-3 bosses", f2: "Every tenth wave the board changes and a boss brings its own powers.",
+    f3t: "A story in pieces", f3: "Collect memories, make choices and meet characters who come back to you.",
+    free: "Free on Android · No energy system · Playable offline"
+  };
+  var turkish = /^tr/i.test(navigator.language || "");
+  if (!turkish) {
+    document.documentElement.lang = "en";
+    document.querySelectorAll("[data-t]").forEach(function (el) { el.textContent = en[el.dataset.t]; });
+    document.getElementById("shots").setAttribute("aria-label", "Game screenshots");
+  }
+  var shots = document.getElementById("shots");
+  for (var i = 1; i <= 5; i++) {
+    var img = new Image();
+    img.src = "img/" + (turkish ? "tr_" : "en_") + i + ".webp";
+    img.alt = "";
+    img.loading = "lazy";
+    shots.appendChild(img);
+  }
+  // ?k=instagram gibi kaynak, Play kurulum kaynağına aktarılır.
+  var source = (new URLSearchParams(location.search).get("k") || "web").replace(/[^a-z0-9_-]/gi, "").slice(0, 30) || "web";
+  var referrer = "utm_source%3D" + source + "%26utm_medium%3Dsayfa";
+  var web = "https://play.google.com/store/apps/details?id=com.runemist.game&referrer=" + referrer;
+  var play = document.getElementById("play");
+  play.href = /android/i.test(navigator.userAgent)
+    ? "intent://details?id=com.runemist.game&referrer=" + referrer + "#Intent;scheme=market;package=com.android.vending;S.browser_fallback_url=" + encodeURIComponent(web) + ";end"
+    : web;
+})();
+</script>
 </body>
 </html>
